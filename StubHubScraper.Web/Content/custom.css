@@ -1,5 +1,8 @@
 ﻿body {
 }
+hr {
+    margin:15px 0 !important;
+}
 .logo-default {
     margin-top: 10px !important;
     margin-left: 50px !important;

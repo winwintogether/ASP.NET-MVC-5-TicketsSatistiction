@@ -31,13 +31,13 @@ namespace StubHubScraper.Web.Controllers
         }
 
         [Queryable]
-        public IQueryable<ChartModel> GetEventChartData(int quickId)
+        public IQueryable<ChartModel> GetEventChartData(int quickId, int chartduration)
         {
             var user = _authenticationService.GetAuthenticatedUser();
             var list=new List<ChartModel>();
-            DateTime date = DateTime.Now.AddDays(-10);
+            DateTime date = DateTime.Now.AddDays(-1*chartduration);
             var max = 0.0M;
-            for(int i=0;i<10;i++)
+            for(int i=0;i< chartduration; i++)
             {
                 date = date.AddDays(1);
                 decimal average=0;int sales=0;
