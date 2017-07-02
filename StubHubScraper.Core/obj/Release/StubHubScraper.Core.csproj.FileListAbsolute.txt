@@ -1,0 +1,5 @@
+D:\Metronic\WebStubhub\StubHubScraper.Core\bin\Release\StubHubScraper.Core.dll
+D:\Metronic\WebStubhub\StubHubScraper.Core\bin\Release\StubHubScraper.Core.pdb
+D:\Metronic\WebStubhub\StubHubScraper.Core\obj\Release\StubHubScraper.Core.csprojResolveAssemblyReference.cache
+D:\Metronic\WebStubhub\StubHubScraper.Core\obj\Release\StubHubScraper.Core.dll
+D:\Metronic\WebStubhub\StubHubScraper.Core\obj\Release\StubHubScraper.Core.pdb

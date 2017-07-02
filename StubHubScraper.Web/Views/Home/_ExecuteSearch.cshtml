@@ -1,0 +1,225 @@
+﻿  <!-- BEGIN HEADER -->
+<div class="page-header navbar navbar-fixed-top">
+    <!-- BEGIN HEADER INNER -->
+    <div class="page-header-inner ">
+        <!-- BEGIN LOGO -->
+        <div class="page-logo">
+            <a href="#">
+                <img src="Content/imgs/logo.png" alt="logo" class="logo-default" />
+
+            </a>
+            <div class="menu-toggler sidebar-toggler">
+                <!-- DOC: Remove the above "hide" to enable the sidebar toggler button on header -->
+            </div>
+        </div>
+        <!-- END LOGO -->
+        <!-- BEGIN RESPONSIVE MENU TOGGLER -->
+        <a href="javascript:;" class="menu-toggler responsive-toggler" data-toggle="collapse" data-target=".navbar-collapse"> </a>
+        <!-- END RESPONSIVE MENU TOGGLER -->
+        <!-- BEGIN PAGE TOP -->
+        <div class="page-top">
+
+            <div class="top-menu">
+                <ul class="nav navbar-nav pull-right">
+
+                    <li class="dropdown dropdown-user">
+                        <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                            <img alt="" class="img-circle" src="Content/assets/layouts/layout2/img/avatar3_small.jpg" />
+                            <span class="username username-hide-on-mobile"> @ViewBag.Username </span>
+                            <i class="fa fa-angle-down"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-default">
+                            <li>
+                                <a href=@Url.Action("Index", "Home", new { ReturnUrl = "6" })>
+                                    <i class="icon-user"></i>Management Users
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li id="logout">
+                                <a><i class="icon-key"></i>Log Out</a>
+                            </li> 
+                        </ul>
+                    </li>
+                    <!-- END USER LOGIN DROPDOWN -->
+                    
+                </ul>
+            </div>
+            <!-- END TOP NAVIGATION MENU -->
+        </div>
+        <!-- END PAGE TOP -->
+    </div>
+    <!-- END HEADER INNER -->
+</div>
+<!-- END HEADER -->
+<!-- BEGIN HEADER & CONTENT DIVIDER -->
+<div class="clearfix"> </div>
+<!-- END HEADER & CONTENT DIVIDER -->
+<!-- BEGIN CONTAINER -->
+<div class="page-container">
+    <!-- BEGIN SIDEBAR -->
+    <div class="page-sidebar-wrapper">
+        <div class="page-sidebar navbar-collapse collapse">
+            <ul class="page-sidebar-menu  page-header-fixed page-sidebar-menu-hover-submenu " data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
+                <li class="nav-item start">
+                    <a href=@Url.Action("Index", "Home", new { ReturnUrl = "1" }) class="nav-link nav-toggle">
+                        <i class="icon-bar-chart"></i>
+                        <span class="title">Quick Search</span>
+                        <span class="arrow"></span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href=@Url.Action("Index", "Home", new { ReturnUrl = "2" }) class="nav-link nav-toggle">
+                        <i class="icon-magic-wand"></i>
+                        <span class="title">Create Search</span>
+                        <span class="arrow"></span>
+                        <!--<span class="selected"></span>
+                        <span class="arrow open"></span>-->
+                    </a>
+                </li>
+
+                <li class="nav-item active open">
+                    <a href=@Url.Action("Index", "Home", new { ReturnUrl = "3" }) class="nav-link nav-toggle">
+                        <i class="icon-home  active open"></i>
+                        <span class="title">Execute Search</span>
+                        <span class="selected"></span>
+                        <span class="arrow open"></span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href=@Url.Action("Index", "Home", new { ReturnUrl = "4" }) class="nav-link nav-toggle">
+                        <i class="icon-envelope-letter"></i>
+                        <span class="title">Ticket Data</span>
+                        <span class="arrow"></span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href=@Url.Action("Index", "Home", new { ReturnUrl = "5" }) class="nav-link nav-toggle">
+                        <i class="icon-briefcase"></i>
+                        <span class="title">Search Log</span>
+                        <span class="arrow"></span>
+                    </a>
+                </li>
+
+            </ul>
+            <!-- END SIDEBAR MENU -->
+        </div>
+        <!-- END SIDEBAR -->
+    </div>
+    <!-- END SIDEBAR -->
+    <!-- BEGIN CONTENT -->
+    <div class="page-content-wrapper">
+        <!-- BEGIN CONTENT BODY -->
+        <div class="page-content">
+            <div class="row">
+
+                <div class="col-md-6">
+                    <div class="portlet box green">
+                        <div class="portlet-title">
+                            <div class="caption">
+                               
+                                <span class="caption-subject font-white-sharp">Manual Searching</span>
+                            </div>
+
+                        </div>
+                        <div class="portlet-body" style="height:400px">
+                            <form class="form-horizontal">                              
+                                <div class="row">
+                                    <div class="form-group">
+                                        <label class="col-md-3 control-label" for="title">Select List:</label>
+                                        <div class="col-md-5">
+                                            <select id="cboSearches" class="form-control input-large input-inline"></select>
+                                        </div>
+                                        <div class="col-md-4"></div>
+                                     </div>
+                                     <div class="form-group">
+                                         <label class="col-md-3 control-label" for="title">Events:</label>
+                                         <div class="col-md-5">
+                                             <select multiple="multiple" class="multi-select" id="eventlist" style="width:100%;height: 150px"></select>
+                                         </div>
+                                         <div class="col-md-4">
+                                             <button id="btnScrapingStart" type="button" style="display:block" class="btn green ladda-button" data-style="expand-right"><span class="ladda-label">Start</span></button>
+                                             <br>
+                                             <button id="btnScrapingStop" type="button" class="btn green">Stop</button>
+                                         </div>
+                                       </div>
+
+                                       <div class="form-group">
+                                           <div class="col-md-3"></div>
+                                           <div class="col-md-3">
+                                                <div class="md-checkbox">
+                                                   <input type="checkbox" id="cbsavetocsv" class="md-check">
+                                                   <label for="cbsavetocsv">
+                                                      <span></span>
+                                                      <span class="check"></span>
+                                                      <span class="box"></span>Save to CSV
+                                                    </label>
+                                                  </div>
+                                             </div>
+                                             <div class="col-md-3">
+                                                 <button id="btnDownload" type="button" class="btn green">DownLoad CSV</button>
+                                             </div>
+                                         </div>                                                          
+                                 </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="portlet box green">
+                        <div class="portlet-title">
+                            <div class="caption">
+                               
+                                <span class="caption-subject font-white-sharp">Manual Searching Multiple Searches </span>
+                            </div>
+                        </div>
+                        <div class="portlet-body" style="height:400px">
+                            <form class="form-horizontal">
+                                <div class="row">
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <div class="form-group">
+                                        <label class="col-md-3 control-label" for="title">Searches:</label>
+                                        <div class="col-md-5">
+                                            <select multiple="multiple" class="multi-select" id="multiSearches" style="width:100%;height: 150px"></select>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <button id="btnScrapingStart_2" type="button" style="display:block"  class="btn green ladda-button" data-style="expand-right"><span class="ladda-label">Start</span></button>
+                                            <br>
+                                            <button id="btnScrapingStop_2" type="button" class="btn green">Stop</button>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="col-md-3"></div>
+                                        <div class="col-md-3">
+                                            <div class="md-checkbox">
+                                                <input type="checkbox" id="savetocsv" class="md-check">
+                                                <label for="savetocsv">
+                                                    <span></span>
+                                                    <span class="check"></span>
+                                                    <span class="box"></span>Save to CSV
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <button id="btnDownload_2" type="button" class="btn green">DownLoad CSV</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <!-- END CONTENT BODY -->
+    </div>
+    <!-- END CONTENT -->
+
+</div>
+<!-- END CONTAINER -->

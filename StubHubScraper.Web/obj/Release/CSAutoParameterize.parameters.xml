@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<parameters>
+  <parameter name="ApplicationConnection-Web.config Connection String" description="ApplicationConnection Connection String used in web.config by the application to access the database." defaultValue="Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=StubHubScraper;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=True;ApplicationIntent=ReadWrite;MultiSubnetFailover=False;MultipleActiveResultSets=true;" tags="SqlConnectionString">
+    <parameterEntry kind="XmlFile" scope="D:\\Metronic\\WebStubhub\\StubHubScraper\.Web\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='ApplicationConnection']/@connectionString" />
+  </parameter>
+  <parameter name="StubHubScraper.Data.ApplicationDbObjectContext-Web.config Connection String" description="StubHubScraper.Data.ApplicationDbObjectContext Connection String used in web.config by the application to access the database." defaultValue="StubHubScraper.Data.ApplicationDbObjectContext_ConnectionString" tags="SqlConnectionString">
+    <parameterEntry kind="XmlFile" scope="D:\\Metronic\\WebStubhub\\StubHubScraper\.Web\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='StubHubScraper.Data.ApplicationDbObjectContext']/@connectionString" />
+  </parameter>
+  <parameter name="StubHubScraper.Data.DbObjectContext-Web.config Connection String" description="StubHubScraper.Data.DbObjectContext Connection String used in web.config by the application to access the database." defaultValue="StubHubScraper.Data.DbObjectContext_ConnectionString" tags="SqlConnectionString">
+    <parameterEntry kind="XmlFile" scope="D:\\Metronic\\WebStubhub\\StubHubScraper\.Web\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='StubHubScraper.Data.DbObjectContext']/@connectionString" />
+  </parameter>
+</parameters>
