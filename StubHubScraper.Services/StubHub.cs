@@ -146,8 +146,6 @@ namespace StubHubScraper.Services
                 }
             }
 
-
-
             return results;
         }
 
