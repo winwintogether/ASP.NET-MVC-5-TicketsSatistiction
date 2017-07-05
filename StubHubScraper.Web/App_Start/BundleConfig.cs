@@ -7,17 +7,7 @@ namespace StubHubScraper.Web
     {
         // For more information on Bundling, visit http://go.microsoft.com/fwlink/?LinkId=254725
 
-        public static void AddDefaultIgnorePatterns(IgnoreList ignoreList)
-        {
-         //   if (ignoreList == null)
-          //      throw new ArgumentNullException("ignoreList");
-            ignoreList.Ignore("*.intellisense.js");
-            ignoreList.Ignore("*-vsdoc.js");
-            ignoreList.Ignore("*.debug.js", OptimizationMode.WhenEnabled);
-            ignoreList.Ignore("*.min.js", OptimizationMode.WhenDisabled);
-            ignoreList.Ignore("*.min.css", OptimizationMode.WhenDisabled);
-        }
-
+      
         public static void RegisterBundles(BundleCollection bundles)
         {
 
@@ -62,7 +52,7 @@ namespace StubHubScraper.Web
                   "~/Scripts/custom_table.js"));
 
             bundles.Add(new StyleBundle("~/bundles/metronic_css").Include(
-               "~/Content/assets/global/plugins/font-awesome/css/font-awesome.min.css",
+                "~/Content/assets/global/plugins/font-awesome/css/font-awesome.min.css",
                 "~/Content/assets/global/plugins/simple-line-icons/simple-line-icons.min.css",
                 "~/Content/assets/global/plugins/bootstrap/css/bootstrap.min.css",
                 "~/Content/assets/global/plugins/uniform/css/uniform.default.css",

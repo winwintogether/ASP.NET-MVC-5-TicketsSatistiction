@@ -119,7 +119,7 @@ namespace StubHubScraper.Services
             if (proxy != null) restClient.Proxy = proxy;
 
             string resource = string.Concat("search/inventory/v2/listings/?eventId=", eventId, "&start=0&rows=20&zoneStats=true",
-                "&sectionStats=false&allSectionZoneStats=false&eventLevelStats=false&quantitySummary=false");
+                "&sectionStats=true&allSectionZoneStats=true&eventLevelStats=true&quantitySummary=true&eventPricingSummary=true");
             var restReqeust = new RestRequest(resource, Method.GET);
             restReqeust.AddHeader("Authorization", string.Format("Bearer {0}", token));
 

@@ -69,7 +69,7 @@ namespace StubHubScraper.Web.Controllers
                         quickSearch.LastScrape = DateTime.Now;
                         quickSearch.AllSales = quicktickets.Count;
                         quickSearch.AllTickets = quicktickets.Sum(x => x.Qty);
-                        quickSearch.AvgPrice = Math.Round(quicktickets.Sum(x => x.Qty * x.Price) / quickSearch.AllTickets, 2);
+                        quickSearch.AvgPrice = (quickSearch.AllTickets > 0) ? Math.Round(quicktickets.Sum(x => x.Qty * x.Price) / quickSearch.AllTickets, 2) : 0;
                         quickSearch.Deleted = isSave == 1 ? false : true;
 
                         decimal filterTotal = 0;
@@ -115,7 +115,7 @@ namespace StubHubScraper.Web.Controllers
                                 }
 
                             }
-                            quickSearch.FilterAvgPrice = Math.Round(filterTotal / filterTickets, 2);
+                            quickSearch.FilterAvgPrice = (filterTickets > 0) ? Math.Round(filterTotal / filterTickets, 2) : 0;
                             quickSearch.FilterSales = filterSales;
                             quickSearch.FilterTickets = filterTickets;
                             _quickSearchService.UpdateQuickSearchItem(quickSearch);
@@ -133,7 +133,7 @@ namespace StubHubScraper.Web.Controllers
                             ei.LastScrape = quickSearch.LastScrape;
                             ei.AllTickets = quicktickets.Sum(x => x.Qty);
                             ei.AllSales = quicktickets.Count;
-                            ei.AvgPrice = Math.Round(quicktickets.Sum(x => x.Qty * x.Price) / ei.AllTickets, 2);
+                            ei.AvgPrice = (ei.AllTickets > 0) ? Math.Round(quicktickets.Sum(x => x.Qty * x.Price) / ei.AllTickets, 2) : 0;
                             ei.Deleted = isSave == 1 ? false : true;
 
                            // _quickSearchService.DeleteQuickTickets(ei.Id);
@@ -165,6 +165,10 @@ namespace StubHubScraper.Web.Controllers
                                 }
                                 if (accepted)
                                 {
+                                    filterSales += 1;
+                                    filterTickets += ticket.Qty;
+                                    filterTotal += ticket.Qty * ticket.Price;
+
                                     foreach (var oldTicket in oldTickets)
                                     {
                                         if (ticket.Zone == oldTicket.Zone
@@ -181,18 +185,13 @@ namespace StubHubScraper.Web.Controllers
                                 }
                                 if (accepted)
                                 {
-
-                                    filterSales += 1;
-                                    filterTickets += ticket.Qty;
-                                    filterTotal += ticket.Qty * ticket.Price;
-
                                     ticket.UserId = user.Id;
                                     ticket.QuickId = ei.Id;
                                     _quickSearchService.InsertQuickTicketItem(ticket);
                                 }
 
                             }
-                            ei.FilterAvgPrice = Math.Round(filterTotal / filterTickets, 2);
+                            ei.FilterAvgPrice = (filterTickets > 0) ? Math.Round(filterTotal / filterTickets, 2) : 0;
                             ei.FilterSales = filterSales;
                             ei.FilterTickets = filterTickets;
                             _quickSearchService.UpdateQuickSearchItem(ei);

@@ -4,6 +4,7 @@
     var RequestNum = 0;
     var ResponseNum = 0;
     var selected_TicketId = null;
+  
     var selected_tableGridId = null;
     var selected_tableEventGridId = null;
 
@@ -88,7 +89,7 @@
             grid.DataTable().draw();
 
             console.log(url);
-            console.log(JSON.stringify(data));
+      //      console.log(JSON.stringify(data));
             $.each(data, function (i, v) {
 
                 var row = [];
@@ -189,7 +190,7 @@
                    "average_chart",
                   {
                       "type": "serial",
-                      "theme": "light",
+                      "themce": "light",
                       "fontFamily": 'Open Sans',
                       "color": '#888888',
                       "legend": {
@@ -304,7 +305,7 @@
         if (mm < 10) {
             mm = '0' + mm;
         }
-        var today = dd + '/' + mm;
+        var today = mm + '/' + dd;
 
         var availableData = [{
             "totalTickets": totalTickets,
@@ -520,14 +521,16 @@
 
         if (select_zone == null) {
             InitLoad(5);
+
             $("#PickZones").empty();
+
             ajaxRequest("get", "/api/eventzones/?eventId=" + eventId).done(function (data) {
 
                 $.each(data, function (i, v) {
                     if (i < (data.length - 2))
                     {
                         $("#PickZones").append("<option value='" + v["value"] + "'>" + v["text"] + "</option>");
-                        all_zones.push(v["value"]);
+                        //  all_zones.push(v["value"]);
                     }
                     if (i == (data.length - 2)) {
                         totalTickets = v["text"].split(":")[1];
@@ -573,6 +576,7 @@
             });
         } else {
             InitLoad(4);
+          
             ajaxRequest("get", "/api/quicksearches/" + eventId + "?isNew=1&isSave=" + isSave + "&sectionFrom=" + sectionFrom + "&sectionTo=" + sectionTo + "&lastWeekSalesOnly=" + LastWeekSalesOnly + "&zones=" + select_zone).done(function (data) {
 
                 $("#txtEventId").val(data.EventId);
@@ -622,7 +626,7 @@
 
         if ($(this).val() != "") {
 
-            InitLoad(4);
+            InitLoad(5);
 
             ajaxRequest("get", "/api/quicksearches/" + $(this).val() + "?isNew=0&isSave=0").done(function (data) {
 
@@ -632,6 +636,7 @@
                     $("#SectionFrom").val(data.SectionFrom);
                     $("#SectionTo").val(data.SectionTo);
                     $("#LastWeekSalesOnly").val(data.LastWeekSalesOnly);
+                    $("#chartduration").val(10);
 
                     $("#AllSales_1").val(data.AllSales);
                     $("#AllTickets_1").val(data.AllTickets);
@@ -647,19 +652,34 @@
                     $("#FilterTickets_2").val(data.NewFilterTickets);
                     $("#FilterAvgPrice_2").val(data.NewFilterAvgPrice);
 
-                    qsTab1Grid = $("#table_1");
-                    qsTab2Grid = $("#table_2");
-                    var columnData = ["Zone", "Section", "Row", "Price", "Qty", "DateSold"];
+                    ajaxRequest("get", "/api/eventzones/?eventId=" + data.EventId).done(function (data1) {
 
-                    loadGridData("/api/quicktickets/?quickId=" + data.Id + "&isNew=0", qsTab1Grid, columnData);
-                    loadGridData("/api/quicktickets/?quickId=" + data.Id + "&isNew=1", qsTab2Grid, columnData);
+                        $.each(data1, function (i, v) {
+                            if (i == (data1.length - 2)) {
+                                totalTickets = v["text"].split(":")[1];
+                            }
 
-                    ajaxRequest("get", "/api/chartdata/?quickId=" + data.Id).done(function (data) {
+                            if (i == (data1.length - 1)) {
+                                minTicketPrice = v["text"].split(":")[1];
+                            }
 
-                        QuickDrawChart(data);
+                        });
 
+                        qsTab1Grid = $("#table_1");
+                        qsTab2Grid = $("#table_2");
+
+                        var columnData = ["Zone", "Section", "Row", "Price", "Qty", "DateSold"];
+
+                        loadGridData("/api/quicktickets/?quickId=" + data.Id + "&isNew=0", qsTab1Grid, columnData);
+                        loadGridData("/api/quicktickets/?quickId=" + data.Id + "&isNew=1", qsTab2Grid, columnData);
+
+                        ajaxRequest("get", "/api/chartdata/?quickId=" + data.Id + "&chartduration=10").done(function (data) {
+
+                            QuickDrawChart(data);
+
+                        });
                     });
-
+                   
                 }
 
                 $("#PickZones").empty();
@@ -801,7 +821,7 @@
             ScanDayBefore: $("#ScanDayBefore").val(),
             Id: selected_tableGridId
         };
-        console.log(sData);
+    //    console.log(sData);
        InitLoad(2);
 
       ajaxRequest('post', '/api/search/', sData).done(function (data) {
@@ -902,7 +922,7 @@
     });
 
     $("#btnSearchSave").on("click", function () {
-        var searchId = selected_tableId;
+        var searchId = selected_tableGridId;
         var ids = "";
         var eventsGrid = $("#bulkeventtable");
       
