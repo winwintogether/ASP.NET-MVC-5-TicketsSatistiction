@@ -64,7 +64,6 @@ namespace StubHubScraper.Web
                 "~/Content/assets/global/plugins/bootstrap-daterangepicker/daterangepicker-bs3.css",
                 "~/Content/assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css",
                
-
                 "~/Content/assets/global/css/components-md.min.css",
                 "~/Content/assets/global/css/plugins-md.min.css",
                 "~/Content/assets/layouts/layout2/css/layout.min.css",

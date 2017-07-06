@@ -5,7 +5,7 @@
     var ResponseNum = 0;
     var selected_TicketId = null;
   
-    var selected_tableGridId = null;
+    var selected_tableGridId = 0;
     var selected_tableEventGridId = null;
 
     /******************************   Shared Function *******************************/
@@ -166,6 +166,7 @@
                "chartScrollbar": {
                    "updateOnReleaseOnly": true
                },
+
                "chartCursor": {
                    "categoryBalloonDateFormat": "DD",
                    "cursorAlpha": 0.1,
@@ -739,7 +740,7 @@
     $("#btnReload").on("click", function () {
         InitLoad(1);
         loadSearches();
-        selected_tableGridId = null;
+        selected_tableGridId = 0;
 
     });
 
