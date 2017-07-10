@@ -34,6 +34,7 @@ namespace StubHubScraper.Web.Controllers
         public IQueryable<ChartModel> GetEventChartData(int quickId, int chartduration)
         {
             var user = _authenticationService.GetAuthenticatedUser();
+           
             var list=new List<ChartModel>();
             DateTime date = DateTime.Now.AddDays(-1*chartduration);
             var max = 0.0M;
@@ -45,7 +46,8 @@ namespace StubHubScraper.Web.Controllers
                 if (sales > 0)
                 {
                     if (max < average) max = average;
-                    list.Add(new ChartModel { average = average, volume = sales, date = date.ToString("M/d") });
+                    //  list.Add(new ChartModel { average = average, volume = sales, date = date.ToString("M/d") });
+                    list.Add(new ChartModel { average = average, volume = sales, date = date.ToString()});
                 }
             }
             if (list.Count > 0)

@@ -97,7 +97,8 @@ namespace StubHubScraper.Web
                    "~/Content/assets/global/plugins/amcharts/amcharts/amcharts.js",
                    "~/Content/assets/global/plugins/amcharts/amcharts/serial.js",
                    "~/Content/assets/global/plugins/amcharts/amcharts/themes/light.js",
-                   
+                   "~/Content/assets/global/plugins/amcharts/amstockcharts/amstock.js",
+
                    "~/Content/assets/global/scripts/app.min.js",
     
                    "~/Content/assets/layouts/layout2/scripts/layout.min.js",

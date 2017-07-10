@@ -178,20 +178,7 @@
                                                     <input id="SectionTo" type="text" class="form-control input-small input-inline" />
                                                 </div>
                                             </div>
-                                            <div class="form-group">
-                                                <label class="col-md-3 control-label" for="title">Duration:</label>
-                                                <div class="col-md-9">
-                                                    <select id="chartduration" class="form-control input-large input-inline">
-                                                        <option value="10" selected="selected">Last 10 Days</option>
-                                                        <option value="30">Last 30 Days</option>
-                                                        <option value="60">Last 60 Days</option>
-                                                        <option value="90">Last 90 Days</option>
-                                                        <option value="183">Last 6 Months</option>
-                                                        <option value="365">Last a year</option>
-                                                    </select>
-                                                </div>                                                
-                                            </div>
-
+                                     
                                             <div class="form-group">
                                                 <div class="col-md-3"></div>
                                                 <div class="col-md-9">
@@ -254,39 +241,19 @@
                 </div>
                 
                 <div class="col-md-6">
-                    <!--<div class="portlet light ">
-                        <div class="portlet-title">
-                            <div class="caption">
-                                <i class="icon-bar-chart font-green-haze"></i>
-                                <span class="caption-subject bold uppercase font-green-haze"> Chart Result</span>
-                                
-                            </div>
-                            <div class="tools">
-                                <a href="javascript:;" class="collapse"> </a>
-                                <a href="#portlet-config" data-toggle="modal" class="config"> </a>
-                                <a href="javascript:;" class="reload"> </a>
-                                <a href="javascript:;" class="fullscreen"> </a>
-                                <a href="javascript:;" class="remove"> </a>
-                            </div>
-                        </div>
-                        <div class="portlet-body">
-                            <div id="chart_1" class="chart" style="height: 400px;"> </div>
-                        </div>
-                    </div>
-                    -->
-                    <div class="portlet box green">
+                   <div class="portlet box green">
                         <div class="portlet-title">
                             <div class="caption">
                                 
-                                <span class="caption-subject font-white-sharp">Chart Result</span>
+                                <span class="caption-subject font-white-sharp">Chart Results</span>
                             </div>
-                            <ul class="nav nav-tabs">
+                            <ul class="nav nav-tabs" >
                                
-                                <li class="active">
+                                <li class="active" id="volumechart">
                                     <a href="#portlet_tab1" data-toggle="tab"> Volume </a>
                                 </li>
                                
-                                <li>
+                                <li id="averagechart">
                                     <a href="#portlet_tab2" data-toggle="tab"> Moving-Average </a>
                                 </li>
 
@@ -309,7 +276,7 @@
                                     <div id="volume_chart" class="chart" style="height: 350px;"> </div>
                                 </div>
                                 <div class="tab-pane" id="portlet_tab2">
-                                    <div id="average_chart" class="chart" style="height: 350px;"> </div>
+                                    <div id="average_chart" class="chart" style="height:350px;"> </div>
                                 </div>
                                 <div class="tab-pane" id="portlet_tab3">
                                     <div id="available_chart" class="chart" style="height: 350px;"> </div>

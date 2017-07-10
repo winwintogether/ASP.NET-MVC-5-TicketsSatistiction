@@ -1,13 +1,13 @@
 ﻿$(document).ready(function () {
 
-    /*********************************Global Variable**********************************************/
+    /*********************************Global Variable*******************************/
     var RequestNum = 0;
     var ResponseNum = 0;
     var selected_TicketId = null;
   
     var selected_tableGridId = 0;
     var selected_tableEventGridId = null;
-
+    var Daterange = 10;
     /******************************   Shared Function *******************************/
 
     function ajaxRequest(type, url, data, dataType) { // Ajax helper
@@ -27,10 +27,12 @@
                //var err = eval("(" + xhr.responseText + ")");
                // if (err.message == undefined)
                //      alert("undefined error");
-               // else
+                // else
+                console.log(JSON.stringify(xhr));
                 bootbox.alert(error);
 
-            }
+            },
+            timeout: 100000
         };
 
         var antiForgeryToken = $("#antiForgeryToken").val();
@@ -89,7 +91,7 @@
             grid.DataTable().draw();
 
             console.log(url);
-      //      console.log(JSON.stringify(data));
+       //      console.log(JSON.stringify(data));
             $.each(data, function (i, v) {
 
                 var row = [];
@@ -134,115 +136,199 @@
     /*****************************Quick Search**************************************/
     var totalTickets=0;
     var minTicketPrice = 0;
-
+    var DrawChartData = [];
+   
     function QuickDrawChart(chartData) {
+        var volume = AmCharts.makeChart("volume_chart", {
+            type: "stock",
+            "theme": "light",
+            pathToImages: "Content/assets/global/plugins/amcharts/amcharts/images/",
+            "fontFamily": 'Open Sans',
+            "color": '#888',
 
-        var volume = AmCharts.makeChart(
+            dataSets: [{
+                color: "#b0de09",
+                fieldMappings: [{
+                    fromField: "volume",
+                    toField: "volume"
+                },
+                ],
+                dataProvider: chartData,
+                categoryField: "date"
+            }],
+            
+            panels: [{
+                title: "Value",
+                percentHeight: 70,
+                stockGraphs: [{
+                    id: "g1",
+                    valueField: "volume",
+                }]
+             }],
+            
+            panelsSettings: {
+                //    "color": "#fff",
+                marginLeft: 60,
+                marginTop: 5,
+                marginBottom: 5
+            },
+            valueAxesSettings: {
+                inside: false,
+                showLastLabel: true
+            },
+            chartScrollbarSettings: {
+                graph: "g1",
+                color: "#00F"
+            },
+            chartCursorSettings: {
+                valueBalloonsEnabled: true,
+                graphBulletSize: 1,
+                valueLineBalloonEnabled: true,
+                valueLineEnabled: true,
+                valueLineAlpha: 0.5
+            },
 
-            "volume_chart",
-           {
-               "type": "serial",
-               "theme": "light",
-               "fontFamily": 'Open Sans',
-               "color": '#888888',
-               "legend": {
-                   "equalWidths": false,
-                   "useGraphSettings": true,
-                   "valueAlign": "left",
-                   "valueWidth": 120
-               },
-               "dataProvider": chartData,
-               "graphs": [{
-                   "alphaField": "alpha",
-                   "balloonText": "[[value]] ",
-                   "dashLengthField": "dashLength",
-                   "fillAlphas": 0.7,
-                   "legendValueText": "[[value]]",
-                   "title": "Volume",
-                   "type": "column",
-                   "valueField": "volume",
-                   "valueAxis": "volumeAxis"
-               }],
-               "chartScrollbar": {
-                   "updateOnReleaseOnly": true
-               },
+            periodSelector: {
+                dateFormat:"YYYY/MM/DD",
+                periods: [{
+                    period: "DD",
+                    count: 10,
+                    label: "10 days"
+                }, {
+                    period: "MM",
+                    count: 1,
+                    label: "1 month"
+                }, {
+                    period: "MM",
+                    count: 3,
+                    label: "3 months"
+                }, {
+                    period: "MM",
+                    count: 6,
+                    label: "6 months"
+                }, {
+                    period: "MAX",
+                    label: "ALL"
+                }]
+            },
 
-               "chartCursor": {
-                   "categoryBalloonDateFormat": "DD",
-                   "cursorAlpha": 0.1,
-                   "cursorColor": "#000000",
-                   "fullWidth": true,
-                   "valueBalloonsEnabled": false,
-                   "zoomable": false
-               },
-               "categoryField": "date",
-               "exportConfig": {
-                   "menuBottom": "20px",
-                   "menuRight": "22px",
-                   "menuItems": [{
-                       "icon": App.getGlobalPluginsPath() + "amcharts/amcharts/images/export.png",
-                       "format": 'png'
-                   }]
-               }
-           });
+        });
 
-        var average = AmCharts.makeChart(
+        var average = AmCharts.makeChart("average_chart", {
+            type: "stock",
+            "theme": "light",
+            pathToImages: "Content/assets/global/plugins/amcharts/amcharts/images/",
+            "fontFamily": 'Open Sans',
 
-                   "average_chart",
-                  {
-                      "type": "serial",
-                      "themce": "light",
-                      "fontFamily": 'Open Sans',
-                      "color": '#888888',
-                      "legend": {
-                          "equalWidths": false,
-                          "useGraphSettings": true,
-                          "valueAlign": "left",
-                          "valueWidth": 120
-                      },
-                      "dataProvider": chartData,
-                      "graphs": [{
-                           "bullet": "square",
-                           "bulletBorderAlpha": 1,
-                           "bulletBorderThickness": 1,
-                           "dashLengthField": "dashLength",
-                           "legendValueText": "[[value]]",
-                           "title": "Moving Average",
-                           "fillAlphas": 0,
-                           "valueField": "average",
-                           "valueAxis": "averageAxis"
-                      }],
-                      "chartScrollbar": {
-                          "updateOnReleaseOnly": true
-                      },
-                      "chartCursor": {
-                          "categoryBalloonDateFormat": "DD",
-                          "cursorAlpha": 0.1,
-                          "cursorColor": "#000000",
-                          "fullWidth": true,
-                          "valueBalloonsEnabled": false,
-                          "zoomable": false
-                      },
-                      "categoryField": "date",
-                      "exportConfig": {
-                          "menuBottom": "20px",
-                          "menuRight": "22px",
-                          "menuItems": [{
-                              "icon": App.getGlobalPluginsPath() + "amcharts/amcharts/images/export.png",
-                              "format": 'png'
-                          }]
-                      }
-                  });
+            "color": '#888',
+            dataSets: [{
+                color: "#b0de09",
+                fieldMappings: [{
+                    fromField: "average",
+                    toField: "average"
+                },
+              
+                ],
+                dataProvider: chartData,
+                categoryField: "date"              
+            }],
+
+            panels: [{
+                title: "Value",             
+                percentHeight: 70,
+                stockGraphs: [{
+                    id: "g1",
+                    valueField: "average"
+                }],              
+            }],
+            panelsSettings: {
+                //    "color": "#fff",
+                marginLeft: 60,
+                marginTop: 5,
+                marginBottom: 5
+            },
+            valueAxesSettings: {
+                inside: false,
+                showLastLabel: true
+            },
+            chartScrollbarSettings: {
+                graph: "g1",
+                color: "#00F"
+            },
+            
+            chartCursorSettings: {
+                valueBalloonsEnabled: true,
+                graphBulletSize: 1,
+                valueLineBalloonEnabled: true,
+                valueLineEnabled: true,
+                valueLineAlpha: 0.5
+            },
+
+            periodSelector: {
+                dateFormat: "YYYY/MM/DD",
+                periods: [{
+                    period: "DD",
+                    count: 10,
+                    label: "10 days"
+                }, {
+                    period: "MM",
+                    count: 1,
+                    label: "1 month"
+                }, {
+                    period: "MM",
+                    count: 3,
+                    label: "3 months"
+                }, {
+                    period: "MM",
+                    count: 6,
+                    label: "6 months"
+                }, {
+                    period: "MAX",
+                    label: "ALL"
+                }]
+            },
+        
+        });
 
         var sold = 0;
         var date_from = "";
         var date_to = "";
+        var dd;
+        var yyyy;
+        var mm;
         $.each(chartData, function (i, v) {
             if (i == 0) {
-                date_from = v["date"];
+                date_from = new Date(v["date"]);
+                 dd = date_from.getDate();
+                 yyyy =date_from.getFullYear();
+                 mm = date_from.getMonth() + 1;
+                 if (dd < 10) {
+                     dd = '0' + dd;
+                 }
+                 if (mm < 10) {
+                     mm = '0' + mm;
+                 }
+                
+                date_from = yyyy + '/' + mm + '/' + dd;
+
+            }
+            if (i == (chartData.length - 1)) {
+
+                date_to = new Date(v["date"]);
+                dd = date_to.getDate();
+                yyyy = date_to.getFullYear();
+                mm = date_to.getMonth() + 1;
+                if (dd < 10) {
+                    dd = '0' + dd;
+                }
+                if (mm < 10) {
+                    mm = '0' + mm;
+                }
+
+                date_to = yyyy + '/' + mm + '/' + dd;
             }
             sold += v["volume"];
-            date_to = v["date"];
+            
         });
         
         var soldData = [{
@@ -296,8 +382,9 @@
          });
 
         var today = new Date();
-        var dd = today.getDate();
-        var mm = today.getMonth() + 1; //January is 0!
+         dd = today.getDate();
+         yyyy = today.getYear();
+         mm = today.getMonth() + 1; //January is 0!
 
         var yyyy = today.getFullYear();
         if (dd < 10) {
@@ -306,7 +393,7 @@
         if (mm < 10) {
             mm = '0' + mm;
         }
-        var today = mm + '/' + dd;
+        var today = yyyy + '/' + mm+'/'+dd;
 
         var availableData = [{
             "totalTickets": totalTickets,
@@ -409,7 +496,7 @@
        
     }
 
-    function QuickSearchInit() {
+    function QuickSearchInit()   {
 
         $("#cbSaveQuickSearch").attr("checked", false);
         $("#cbSaveQuickSearch").attr('disabled', true);
@@ -509,29 +596,29 @@
         var sectionFrom = $("#SectionFrom").val();
         var sectionTo = $("#SectionTo").val();
         var LastWeekSalesOnly = 0;
-        var charduration = $("#chartduration").val();
+     
         var lwso = $("#LastWeekSalesOnly").is(':checked');
 
         if (lwso) LastWeekSalesOnly = 1;
 
         if (isChecked) isSave = 1;
 
-        var all_zones=[];
-
+        var all_zones = [];
         var select_zone = $("#PickZones").val();
+       
 
         if (select_zone == null) {
-            InitLoad(5);
 
-            $("#PickZones").empty();
+           InitLoad(4);
 
-            ajaxRequest("get", "/api/eventzones/?eventId=" + eventId).done(function (data) {
+           $("#PickZones").empty();
 
-                $.each(data, function (i, v) {
+           ajaxRequest("get", "/api/eventzones/?eventId=" + eventId).done(function (data) {
+
+             $.each(data, function (i, v) {
                     if (i < (data.length - 2))
                     {
-                        $("#PickZones").append("<option value='" + v["value"] + "'>" + v["text"] + "</option>");
-                        //  all_zones.push(v["value"]);
+                        $("#PickZones").append("<option value='" + v["value"] + "'>" + v["text"] + "</option>");                      
                     }
                     if (i == (data.length - 2)) {
                         totalTickets = v["text"].split(":")[1];
@@ -542,7 +629,9 @@
                     }
                    
                 });
+
              $('#PickZones option').prop('selected', true);
+
              ajaxRequest("get", "/api/quicksearches/" + eventId + "?isNew=1&isSave=" + isSave + "&sectionFrom=" + sectionFrom + "&sectionTo=" + sectionTo + "&lastWeekSalesOnly=" + LastWeekSalesOnly + "&zones=" + all_zones).done(function (data) {
 
                  $("#txtEventId").val(data.EventId);
@@ -562,24 +651,55 @@
                  var qsTab2Grid = $("#table_2");
                  var columnData = ["Zone", "Section", "Row", "Price", "Qty", "DateSold"];
 
-                 loadGridData("/api/quicktickets/?quickId=" + data.Id + "&isSave=" + isSave, qsTab2Grid, columnData);
+               
+                 ajaxRequest("get", "/api/quicktickets/?quickId=" + data.Id + "&isSave=" + isSave).done(function (tdata) {
 
-                 var cboQuickSearches = $("#cboQuickSearches");
-                 cboQuickSearches.empty();
-                 loadComboData(cboQuickSearches, "/api/QuickSearches/", "Name", "Id", '');
+                     qsTab2Grid.DataTable().clear();
+                     qsTab2Grid.DataTable().draw();
 
-                 ajaxRequest("get", "/api/chartdata/?quickId=" + data.Id + "&chartduration=" + charduration).done(function (data) {
+                     var date1 = new Date();
+                     var date2 = null;
+
+                     $.each(tdata, function (i, v) {
+
+                         var row = [];
+
+                         if (i == (tdata.length - 1)) date2 = new Date(v["DateSold"]);
+                         $.each(columnData, function (j, k) {
+
+                             row.push(v[columnData[j]]);
+                         });
+
+                         qsTab2Grid.DataTable().row.add(row);
+                         qsTab2Grid.DataTable().draw();
+                     });
+
+                     var timeDiff = Math.abs(date1.getTime() - date2.getTime());
+                     var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+
+                     console.log("difference Days:" + diffDays);
+                                        
+                    /* ajaxRequest("get", "/api/chartdata/?quickId=" + data.Id + "&chartduration=" + diffDays).done(function (data) {
+                             QuickDrawChart(data);
+                     });*/
+                 });
+
+                 ajaxRequest("get", "/api/chartdata/?quickId=" + data.Id + "&chartduration=" + "500").done(function (data) {
+
+                     DrawChartData = data;
                      QuickDrawChart(data);
+                     
                  });
 
              });
 
             });
         } else {
-            InitLoad(4);
+            InitLoad(3);
           
             ajaxRequest("get", "/api/quicksearches/" + eventId + "?isNew=1&isSave=" + isSave + "&sectionFrom=" + sectionFrom + "&sectionTo=" + sectionTo + "&lastWeekSalesOnly=" + LastWeekSalesOnly + "&zones=" + select_zone).done(function (data) {
 
+                console.log(select_zone);
                 $("#txtEventId").val(data.EventId);
                 $("#SectionFrom").val(data.SectionFrom);
                 $("#SectionTo").val(data.SectionTo);
@@ -597,16 +717,44 @@
                 var qsTab2Grid = $("#table_2");
                 var columnData = ["Zone", "Section", "Row", "Price", "Qty", "DateSold"];
 
-                loadGridData("/api/quicktickets/?quickId=" + data.Id + "&isSave=" + isSave, qsTab2Grid, columnData);
+                ajaxRequest("get", "/api/quicktickets/?quickId=" + data.Id + "&isSave=" + isSave).done(function (tdata) {
 
-                var cboQuickSearches = $("#cboQuickSearches");
-                cboQuickSearches.empty();
-                loadComboData(cboQuickSearches, "/api/QuickSearches/", "Name", "Id", '');
+                    qsTab2Grid.DataTable().clear();
+                    qsTab2Grid.DataTable().draw();
 
-                ajaxRequest("get", "/api/chartdata/?quickId=" + data.Id + "&chartduration=" + charduration).done(function (data) {
-                    QuickDrawChart(data);
+                    var date1 = new Date();
+                    var date2 = null;
+
+                    $.each(tdata, function (i, v) {
+
+                        var row = [];
+
+                        if (i == (tdata.length - 1)) date2 = new Date(v["DateSold"]);
+                        $.each(columnData, function (j, k) {
+
+                            row.push(v[columnData[j]]);
+                        });
+
+                        qsTab2Grid.DataTable().row.add(row);
+                        qsTab2Grid.DataTable().draw();
+                    });
+
+                    var timeDiff = Math.abs(date1.getTime() - date2.getTime());
+                    var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+
+                    console.log("difference Days:" + diffDays);
+
+                   /* ajaxRequest("get", "/api/chartdata/?quickId=" + data.Id + "&chartduration=" + diffDays).done(function (data) {
+                        QuickDrawChart(data);
+                    });
+                    */
                 });
+                ajaxRequest("get", "/api/chartdata/?quickId=" + data.Id + "&chartduration=" + "500").done(function (data) {
 
+                    DrawChartData = data;
+                    QuickDrawChart(data);
+
+                });
             });
 
         }
@@ -624,8 +772,12 @@
     });
 
     $("#cboQuickSearches").on("change", function () {
+       
 
         if ($(this).val() != "") {
+
+            totalTickets = 0;
+            minTicketPrice = 0;
 
             InitLoad(5);
 
@@ -674,8 +826,8 @@
                         loadGridData("/api/quicktickets/?quickId=" + data.Id + "&isNew=0", qsTab1Grid, columnData);
                         loadGridData("/api/quicktickets/?quickId=" + data.Id + "&isNew=1", qsTab2Grid, columnData);
 
-                        ajaxRequest("get", "/api/chartdata/?quickId=" + data.Id + "&chartduration=10").done(function (data) {
-
+                        ajaxRequest("get", "/api/chartdata/?quickId=" + data.Id + "&chartduration=500").done(function (data) {
+                            DrawChartData = data;
                             QuickDrawChart(data);
 
                         });
@@ -694,10 +846,18 @@
         $("#PickZones").empty();
 
     });
-
+   
+    $("#averagechart").on("mouseup", function () {
+        setTimeout(function () {
+            QuickDrawChart(DrawChartData);
+        }, 100)
+    });
+    $("#volumechart").on("mouseup", function () {
+        setTimeout(function () {
+            QuickDrawChart(DrawChartData);
+        }, 100)
+    });
     /*************************Create Search******************************************/
-
-  
 
     function loadSearches() {
 
