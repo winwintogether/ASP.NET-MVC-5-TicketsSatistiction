@@ -111,6 +111,10 @@ namespace StubHubScraper.Services
                 sales = 0;
             }
         }
-
+        public int GetTicketsChartDuration(int userId, int quickId) {
+            var tickets = _quickTicketRepository.Table.Where(x => x.UserId == userId & x.QuickId == quickId).ToList();
+            return tickets.Count;
+        }
+     
     }
 }

@@ -51,6 +51,7 @@
     <Compile Include="DbContextExtensions.cs" />
     <Compile Include="DbObjectContext.cs" />
     <Compile Include="Domain\Event.cs" />
+    <Compile Include="Domain\EventExtraData.cs" />
     <Compile Include="Domain\EventTicket.cs" />
     <Compile Include="Domain\LogLevel.cs" />
     <Compile Include="Domain\User.cs" />

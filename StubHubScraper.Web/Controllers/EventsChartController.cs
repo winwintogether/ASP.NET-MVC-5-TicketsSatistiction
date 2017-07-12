@@ -37,13 +37,14 @@ namespace StubHubScraper.Web.Controllers
         {
             var user = _authenticationService.GetAuthenticatedUser();
             var charts = new List<ChartModel>();
-            DateTime sDate = DateTime.Now.AddDays(-10);
+         //   DateTime sDate = DateTime.Now.AddDays(-10);
             var max = 0.0M;
             try
             {
                 var soldTickets = _manualScrapingService.SearchTickets(user.Id, searchId, eventId, title, venue, startDate, endDate, zone, sectionForm, sectionTo,
                     LastWeekSalesOnly, HidePastEvents, ShowArchivedSearches);
-                var dateList = soldTickets.Where(x => x.DateSold > sDate).Select(x => x.DateSold.Date).Distinct().OrderBy(x => x.Date).ToList();
+                //var dateList = soldTickets.Where(x => x.DateSold > sDate).Select(x => x.DateSold.Date).Distinct().OrderBy(x => x.Date).ToList();
+                var dateList = soldTickets.Select(x => x.DateSold.Date).Distinct().OrderBy(x => x.Date).ToList();
 
                 foreach (var date in dateList)
                 {
@@ -54,7 +55,8 @@ namespace StubHubScraper.Web.Controllers
                     average = Math.Round(tickets.Sum(x => x.Qty * x.Price) / tickets.Sum(x => x.Qty), 2);
                     sales = tickets.Count();
                     if (max < average) max = average;
-                    charts.Add(new ChartModel { average = average, volume = sales, date = date.ToString("M/d") });
+                    //charts.Add(new ChartModel { average = average, volume = sales, date = date.ToString("M/d") });
+                    charts.Add(new ChartModel { average = average, volume = sales, date = date.ToString() });
                 }
                 if (charts.Count > 0)
                 {

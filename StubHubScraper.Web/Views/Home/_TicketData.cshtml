@@ -253,7 +253,10 @@
                                                         <th> Date </th>
                                                         <th> Sales </th>
                                                         <th> Tickets Sold </th>
-                                                        <th> Average Price </th>                                                      
+                                                        <th> Avg. Sold Price </th>
+                                                        <th> Min Active Price </th>                                                      
+                                                        <th> Avg Active Price </th>
+                                                        <th> Active Tickets </th>
                                                     </tr>
                                                 </thead>
                                                 <tbody></tbody>
@@ -261,8 +264,25 @@
                                         </div>
 
                                         <div class="col-md-5">
+                                            <ul class="nav nav-tabs">
 
-                                            <div id="chart_2" class="chart" style="height: 400px;"> </div>
+                                                <li class="active" id="volumeticketchart">
+                                                    <a href="#portlet_tab1" data-toggle="tab"> Volume </a>
+                                                </li>
+
+                                                <li id="averageticketchart">
+                                                    <a href="#portlet_tab2" data-toggle="tab"> Moving-Average </a>
+                                                </li>
+                                            </ul>
+                                            <div class="tab-content">
+                                                <div class="tab-pane active" id="portlet_tab1">
+                                                    <div id="volume_ticket_chart" class="chart" style="height: 350px;"> </div>
+                                                </div>
+                                                <div class="tab-pane" id="portlet_tab2">
+                                                    <div id="average_ticket_chart" class="chart" style="height:350px;"> </div>
+                                                </div>
+                                            </div>
+                                               
 
                                         </div>
                                         

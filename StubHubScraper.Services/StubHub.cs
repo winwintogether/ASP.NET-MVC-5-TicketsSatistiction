@@ -42,8 +42,6 @@ namespace StubHubScraper.Services
             browser.Proxy = proxy;
         }
 
-
-
         private static string Base64Encode(string plainText)
         {
             var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(plainText);
@@ -124,6 +122,7 @@ namespace StubHubScraper.Services
             restReqeust.AddHeader("Authorization", string.Format("Bearer {0}", token));
 
             var resp = restClient.Execute<StubhubSearchInventoryResponse>(restReqeust);
+
             if (resp.StatusCode == HttpStatusCode.OK && resp.Data != null && resp.Data.zone_stats != null)
             {
                 foreach (var zone in resp.Data.zone_stats)
@@ -149,6 +148,35 @@ namespace StubHubScraper.Services
             return results;
         }
 
+        public static EventExtraData GetEventExtraData(int eventId,string token) {
+            EventExtraData extraData = new EventExtraData();
+
+            RestClient restClient = new RestClient("https://api.stubhub.com");
+            if (proxy != null) restClient.Proxy = proxy;
+
+            string resource = string.Concat("search/inventory/v2/listings/?eventId=", eventId, "&start=0&rows=20&zoneStats=true",
+                "&sectionStats=true&allSectionZoneStats=true&eventLevelStats=true&quantitySummary=true&eventPricingSummary=true&pricingSummary=true");
+            var restReqeust = new RestRequest(resource, Method.GET);
+            restReqeust.AddHeader("Authorization", string.Format("Bearer {0}", token));
+
+            var resp = restClient.Execute<StubhubEventExtraData>(restReqeust);
+            if (resp.StatusCode == HttpStatusCode.OK && resp.Data != null)
+            {
+                if (resp.Data.totalTickets != 0) {
+                    extraData.TotalTickets = resp.Data.totalTickets;
+                }
+                if (resp.Data.eventPricingSummary != null)
+                {
+                    extraData.minTicketPrice = resp.Data.eventPricingSummary.minTicketPrice;
+                }
+                if (resp.Data.pricingSummary != null)
+                {
+                    extraData.averageTicketPrice = resp.Data.pricingSummary.averageTicketPriceWithCurrency.amount;
+                }
+            }
+
+            return extraData;
+        }
         public static bool ScrapeEventMainInfo(Event eventItem, string token)
         {
             #region old code
@@ -689,6 +717,19 @@ namespace StubHubScraper.Services
             public List<StubhubSectionStats> sectionStats { get; set; }
             public StubhubEventPricingSummary eventPricingSummary { get; set; }
         }
+
+        class StubhubEventExtraData {
+            public int totalTickets { get; set; }
+            public StubhubEventPricingSummary eventPricingSummary { get; set; }
+            public StubhubPricingSummary pricingSummary { get; set; }
+        }
+        class StubhubPricingSummary {
+            public StubhubAverageTicketPriceWithCurrency averageTicketPriceWithCurrency { get; set; }
+        }
+        class StubhubAverageTicketPriceWithCurrency
+        {
+            public decimal amount { get; set; }
+        }
         class StubhubEventPricingSummary {
             public decimal minTicketPrice { get; set; }
         }
@@ -713,6 +754,7 @@ namespace StubHubScraper.Services
             public string z { get; set; }
             public string zi { get; set; }
         }
+
     }
 
 }

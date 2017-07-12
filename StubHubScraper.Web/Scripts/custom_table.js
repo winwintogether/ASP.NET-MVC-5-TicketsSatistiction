@@ -289,7 +289,8 @@
                // { extend: 'pdf', className: 'btn default' },
                // { extend: 'csv', className: 'btn default' }
             ],
-
+           
+            sDom: 'l<"#lastDate">frtip',
             // setup colreorder extension: http://datatables.net/extensions/colreorder/
             colReorder: {
                 reorderCallback: function () {
@@ -343,17 +344,12 @@
                 "zeroRecords": "No matching records found"
             },
 
-            // Or you can use remote translation file
-            //"language": {
-            //   url: '//cdn.datatables.net/plug-ins/3cfcc339e89/i18n/Portuguese.json'
-            //},
-
             buttons: [
               //  { extend: 'print', className: 'btn default' },
                // { extend: 'pdf', className: 'btn default' },
               //  { extend: 'csv', className: 'btn default' }
             ],
-
+          
             // setup colreorder extension: http://datatables.net/extensions/colreorder/
             colReorder: {
                 reorderCallback: function () {
@@ -364,10 +360,7 @@
                 style: 'single'
             },
             // setup rowreorder extension: http://datatables.net/extensions/rowreorder/
-            rowReorder: {
-
-            },
-
+           
           /*  "order": [
                 [0, 'asc']
             ],*/

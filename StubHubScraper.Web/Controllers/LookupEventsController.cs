@@ -20,6 +20,7 @@ namespace StubHubScraper.Web.Controllers
         private readonly IAuthenticationService _authenticationService;
         private readonly IManualScrapingService _manualScrapingService;
         private readonly ILogger _logger;
+        private static WebProxy proxy = null;
         public LookupEventsController(
             IAuthenticationService authenticationService,
             ILogger logger,
@@ -41,10 +42,16 @@ namespace StubHubScraper.Web.Controllers
             {
                 var soldTickets = _manualScrapingService.SearchTickets(user.Id, searchId, eventId, title, venue, startDate, endDate, zone, sectionForm, sectionTo,
                     LastWeekSalesOnly, HidePastEvents, ShowArchivedSearches);
+
+                StubHub.Login(user.ApiUserName, user.ApiPassword);
+                
+
                 var eIds = soldTickets.Select(x => x.EventId).Distinct();
                 foreach (var eId in eIds)
                 {
                     var eTicket = soldTickets.FirstOrDefault(x => x.EventId == eId);
+                    var extraData = StubHub.GetEventExtraData(eTicket.EventId, user.ApplicationToken);
+
                     var ei = new EventModel()
                     {
                         Id = eTicket.EventId,
@@ -52,7 +59,11 @@ namespace StubHubScraper.Web.Controllers
                         Venue = eTicket.Venue,
                         Date = eTicket.Date.HasValue == true ? eTicket.Date.Value.ToString("MM/dd/yyyy") : "",
                         TicketsCount = soldTickets.Where(x=>x.EventId==eId).Sum(x=>x.Qty),
-                        Sales = soldTickets.Where(x => x.EventId == eId).Count()
+                        Sales = soldTickets.Where(x => x.EventId == eId).Count(),
+                        TotalTickets=extraData.TotalTickets==0 ? "N/A" : extraData.TotalTickets.ToString(),
+                        minTicketPrice=extraData.minTicketPrice == 0 ? "N/A" : extraData.minTicketPrice.ToString(),
+                        averageTicketPrice=extraData.averageTicketPrice == 0 ? "N/A" : extraData.averageTicketPrice.ToString()
+
                     };
                     ei.AvgPrice = Math.Round(soldTickets.Where(x => x.EventId == eId).Sum(x => x.Qty * x.Price) / ei.TicketsCount, 2);
                     eventList.Add(ei);
@@ -64,7 +75,7 @@ namespace StubHubScraper.Web.Controllers
             }
             return eventList.AsQueryable();
         }
-
+      
     }
 
 }

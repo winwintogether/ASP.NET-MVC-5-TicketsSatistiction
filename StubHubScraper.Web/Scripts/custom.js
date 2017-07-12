@@ -24,15 +24,17 @@
             },
             error: function (xhr, status, error) {
                 LoadingOff();
+
                //var err = eval("(" + xhr.responseText + ")");
-               // if (err.message == undefined)
-               //      alert("undefined error");
-                // else
+               //if(err.message == undefined)
+               //  alert("undefined error");
+               //else
+               //
                 console.log(JSON.stringify(xhr));
                 bootbox.alert(error);
 
             },
-            timeout: 100000
+            timeout: 1000000
         };
 
         var antiForgeryToken = $("#antiForgeryToken").val();
@@ -498,9 +500,9 @@
 
     function QuickSearchInit()   {
 
-        $("#cbSaveQuickSearch").attr("checked", false);
-        $("#cbSaveQuickSearch").attr('disabled', true);
-        $("#txtEventId").attr('disabled', true);
+        $("#cbSaveQuickSearch").prop("checked", false);
+        $("#cbSaveQuickSearch").prop('disabled', true);
+        $("#txtEventId").prop('disabled', true);
 
         var cboQuickSearches = $("#cboQuickSearches");
 
@@ -543,14 +545,14 @@
 
         if ($(this).is(':checked')) {
 
-            $("#cbSaveQuickSearch").attr('disabled', false);
-            $("#cboQuickSearches").attr('disabled', true);
-            $("#txtEventId").attr('disabled', false);
+            $("#cbSaveQuickSearch").prop('disabled', false);
+            $("#cboQuickSearches").prop('disabled', true);
+            $("#txtEventId").prop('disabled', false);
             $("#cboQuickSearches").val("");
             $("#txtEventId").val("");
             $("#SectionFrom").val("");
             $("#SectionTo").val("");
-            $("#LastWeekSalesOnly").attr("checked", false);
+            $("#LastWeekSalesOnly").prop("checked", false);
 
             $("#AllSales_1").val("");
             $("#AllTickets_1").val("");
@@ -576,11 +578,11 @@
 
         } else {
 
-            $("#cbSaveQuickSearch").attr("checked", false);
+            $("#cbSaveQuickSearch").prop("checked", false);
             $("#cboQuickSearches").val("");
-            $("#cbSaveQuickSearch").attr("disabled", true);
-            $("#cboQuickSearches").attr("disabled", false);
-            $("#txtEventId").attr("disabled", true);
+            $("#cbSaveQuickSearch").prop("disabled", true);
+            $("#cboQuickSearches").prop("disabled", false);
+            $("#txtEventId").prop("disabled", true);
 
         }
     });
@@ -673,18 +675,10 @@
                          qsTab2Grid.DataTable().row.add(row);
                          qsTab2Grid.DataTable().draw();
                      });
-
-                     var timeDiff = Math.abs(date1.getTime() - date2.getTime());
-                     var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
-
-                     console.log("difference Days:" + diffDays);
-                                        
-                    /* ajaxRequest("get", "/api/chartdata/?quickId=" + data.Id + "&chartduration=" + diffDays).done(function (data) {
-                             QuickDrawChart(data);
-                     });*/
+                    
                  });
 
-                 ajaxRequest("get", "/api/chartdata/?quickId=" + data.Id + "&chartduration=" + "500").done(function (data) {
+                 ajaxRequest("get", "/api/chartdata/?quickId=" + data.Id).done(function (data) {
 
                      DrawChartData = data;
                      QuickDrawChart(data);
@@ -739,17 +733,9 @@
                         qsTab2Grid.DataTable().draw();
                     });
 
-                    var timeDiff = Math.abs(date1.getTime() - date2.getTime());
-                    var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
-
-                    console.log("difference Days:" + diffDays);
-
-                   /* ajaxRequest("get", "/api/chartdata/?quickId=" + data.Id + "&chartduration=" + diffDays).done(function (data) {
-                        QuickDrawChart(data);
-                    });
-                    */
+                                     
                 });
-                ajaxRequest("get", "/api/chartdata/?quickId=" + data.Id + "&chartduration=" + "500").done(function (data) {
+                ajaxRequest("get", "/api/chartdata/?quickId=" + data.Id).done(function (data) {
 
                     DrawChartData = data;
                     QuickDrawChart(data);
@@ -826,7 +812,7 @@
                         loadGridData("/api/quicktickets/?quickId=" + data.Id + "&isNew=0", qsTab1Grid, columnData);
                         loadGridData("/api/quicktickets/?quickId=" + data.Id + "&isNew=1", qsTab2Grid, columnData);
 
-                        ajaxRequest("get", "/api/chartdata/?quickId=" + data.Id + "&chartduration=500").done(function (data) {
+                        ajaxRequest("get", "/api/chartdata/?quickId=" + data.Id).done(function (data) {
                             DrawChartData = data;
                             QuickDrawChart(data);
 
@@ -886,7 +872,8 @@
 
         $("#Name").val($(this).find("td:nth-child(2)").html());
         $("#Schedule").val($(this).find("td:nth-child(3)").html());
-        $("#ScanDayBefore").val($(this).find("td:nth-child(4)").html());
+        $(this).find("td:nth-child(4)").html() == "true" ? $("#ScanDayBefore").prop("checked", true) : $("#ScanDayBefore").prop("checked", false);
+        
 
     });
 
@@ -979,7 +966,7 @@
         var sData = {
             Name: $("#Name").val(),
             Schedule: $("#Schedule").val(),
-            ScanDayBefore: $("#ScanDayBefore").val(),
+            ScanDayBefore: $("#ScanDayBefore").is(":checked") ? 1 : 0,
             Id: selected_tableGridId
         };
     //    console.log(sData);
@@ -999,7 +986,7 @@
         var sData = {
             Name: $("#Name").val(),
             Schedule: $("#Schedule").val(),
-            ScanDayBefore: $("#ScanDayBefore").val(),
+            ScanDayBefore: $("#ScanDayBefore").is(":checked") ? 1 : 0,
             Id: selected_tableGridId
         };
         InitLoad(2);
@@ -1015,7 +1002,7 @@
         var sData = {
             Name: $("#Name").val(),
             Schedule: $("#Schedule").val(),
-            ScanDayBefore: $("#ScanDayBefore").val(),
+            ScanDayBefore: $("#ScanDayBefore").is(":checked") ? 1 : 0,
             Id: selected_tableGridId
         };
 
@@ -1031,7 +1018,7 @@
 
             $("#Name").val("");
             $("#Schedule").val("");
-            $("#ScanDayBefore").val(false);
+            $("#ScanDayBefore").prop("checked", false);
 
         });
     });
@@ -1119,7 +1106,7 @@
 
     function ManualScrapingInit() {
 
-        $("#btnScrapingStop").attr("disabled", true);
+        $("#btnScrapingStop").prop("disabled", true);
 
         var cboSearches = $("#cboSearches");
 
@@ -1127,7 +1114,7 @@
 
         loadComboData(cboSearches, "/api/search/?archived=0", "Name", "Id", '');
 
-        $("#btnScrapingStop_2").attr("disabled", true);
+        $("#btnScrapingStop_2").prop("disabled", true);
 
         ajaxRequest("get", "/api/scrapingmultisearches/").done(function (data) {
 
@@ -1160,7 +1147,7 @@
 
         eventIds = $("#eventlist").val();
 
-        $("#btnScrapingStop").attr("disabled", false);
+        $("#btnScrapingStop").prop("disabled", false);
 
         if (eventIds != null) {
 
@@ -1216,7 +1203,7 @@
 
             bootbox.alert("Please select at least 1 searchItem");
         }
-        $("#btnScrapingStop_2").attr("disabled", false);
+        $("#btnScrapingStop_2").prop("disabled", false);
 
     });
 
@@ -1237,10 +1224,10 @@
     });
 
     /*******************************Ticket Data*****************************************/
-
+    var DrawTicketChartData = [];
     function TicketDrawChart(chartData) {
 
-        var chart = AmCharts.makeChart(
+    /*    var chart = AmCharts.makeChart(
 
             "chart_2",
            {
@@ -1294,6 +1281,156 @@
                    }]
                }
            });
+    */
+        var volume = AmCharts.makeChart("volume_ticket_chart", {
+            type: "stock",
+            "theme": "light",
+            pathToImages: "Content/assets/global/plugins/amcharts/amcharts/images/",
+            "fontFamily": 'Open Sans',
+            "color": '#888',
+
+            dataSets: [{
+                color: "#b0de09",
+                fieldMappings: [{
+                    fromField: "volume",
+                    toField: "volume"
+                },
+                ],
+                dataProvider: chartData,
+                categoryField: "date"
+            }],
+
+            panels: [{
+                title: "Value",
+                percentHeight: 70,
+                stockGraphs: [{
+                    id: "g1",
+                    valueField: "volume",
+                }]
+            }],
+
+            panelsSettings: {
+                //    "color": "#fff",
+                marginLeft: 60,
+                marginTop: 5,
+                marginBottom: 5
+            },
+            valueAxesSettings: {
+                inside: false,
+                showLastLabel: true
+            },
+            chartScrollbarSettings: {
+                graph: "g1",
+                color: "#00F"
+            },
+            chartCursorSettings: {
+                valueBalloonsEnabled: true,
+                graphBulletSize: 1,
+                valueLineBalloonEnabled: true,
+                valueLineEnabled: true,
+                valueLineAlpha: 0.5
+            },
+
+            periodSelector: {
+                dateFormat: "YYYY/MM/DD",
+                periods: [{
+                    period: "DD",
+                    count: 10,
+                    label: "10 days"
+                }, {
+                    period: "MM",
+                    count: 1,
+                    label: "1 month"
+                }, {
+                    period: "MM",
+                    count: 3,
+                    label: "3 months"
+                }, {
+                    period: "MM",
+                    count: 6,
+                    label: "6 months"
+                }, {
+                    period: "MAX",
+                    label: "ALL"
+                }]
+            },
+
+        });
+        var average = AmCharts.makeChart("average_ticket_chart", {
+            type: "stock",
+            "theme": "light",
+            pathToImages: "Content/assets/global/plugins/amcharts/amcharts/images/",
+            "fontFamily": 'Open Sans',
+
+            "color": '#888',
+            dataSets: [{
+                color: "#b0de09",
+                fieldMappings: [{
+                    fromField: "average",
+                    toField: "average"
+                },
+
+                ],
+                dataProvider: chartData,
+                categoryField: "date"
+            }],
+
+            panels: [{
+                title: "Value",
+                percentHeight: 70,
+                stockGraphs: [{
+                    id: "g1",
+                    valueField: "average"
+                }],
+            }],
+            panelsSettings: {
+                //    "color": "#fff",
+                marginLeft: 60,
+                marginTop: 5,
+                marginBottom: 5
+            },
+            valueAxesSettings: {
+                inside: false,
+                showLastLabel: true
+            },
+            chartScrollbarSettings: {
+                graph: "g1",
+                color: "#00F"
+            },
+
+            chartCursorSettings: {
+                valueBalloonsEnabled: true,
+                graphBulletSize: 1,
+                valueLineBalloonEnabled: true,
+                valueLineEnabled: true,
+                valueLineAlpha: 0.5
+            },
+
+            periodSelector: {
+                dateFormat: "YYYY/MM/DD",
+                periods: [{
+                    period: "DD",
+                    count: 10,
+                    label: "10 days"
+                }, {
+                    period: "MM",
+                    count: 1,
+                    label: "1 month"
+                }, {
+                    period: "MM",
+                    count: 3,
+                    label: "3 months"
+                }, {
+                    period: "MM",
+                    count: 6,
+                    label: "6 months"
+                }, {
+                    period: "MAX",
+                    label: "ALL"
+                }]
+            },
+
+        });
 
     }
 
@@ -1348,7 +1485,7 @@
 
         var sdBtab1Grid = $("#table_5");
         var sdBtab2Grid = $("#table_6");
-        var columnData1 = ["Id", "Title", "Venue", "Date", "Sales", "TicketsCount", "AvgPrice"];
+        var columnData1 = ["Id", "Title", "Venue", "Date", "Sales", "TicketsCount", "AvgPrice", "minTicketPrice", "averageTicketPrice", "TotalTickets"];
         var columnData2 = ["Id", "EventId", "EventTitle", "EventVenue", "EventDate", "Zone", "Section", "Row", "Price", "Qty", "DateSold"];
 
         InitLoad(3);
@@ -1369,9 +1506,29 @@
             + "&lastWeekSalesOnly=" + lastWeekSalesOnly + "&hidePastEvents=" + hidePastEvents + "&showArchivedSearches=" + showArchivedSearches).done(function (data) {
 
                 TicketDrawChart(data);
+                
+                var LastDate = new Date(data[data.length - 1]["date"]);
+                var dd = LastDate.getDate();
+                var yyyy = LastDate.getFullYear();
+                var mm = LastDate.getMonth() + 1;
+               /* var hour = LastDate.getHours();
+                var min = LastDate.getMinutes();
+                var sec = LastDate.getSeconds();
+                */
+                if (dd < 10) {
+                    dd = '0' + dd;
+                }
+                if (mm < 10) {
+                    mm = '0' + mm;
+                }
 
+                LastDate = yyyy + '/' + mm + '/' + dd;
+                $("#lastDate").empty();
+                $("#lastDate").append(LastDate);
+
+                DrawTicketChartData = data;
             });
-       
+      
     });
 
     $("#btnExportTicketsToCSV").on("click", function () {
@@ -1444,6 +1601,17 @@
             bootbox.alert("Please select a ticket!");
 
     });
+    $("#averageticketchart").on("mouseup", function () {
+        setTimeout(function () {
+            TicketDrawChart(DrawTicketChartData);
+        }, 100)
+    });
+    $("#volumeticketchart").on("mouseup", function () {
+        setTimeout(function () {
+            TicketDrawChart(DrawTicketChartData);
+        }, 100)
+    });
+   
 
     /*******************************Searching Log*****************************************/
 

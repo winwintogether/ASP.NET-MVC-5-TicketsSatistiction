@@ -17,5 +17,6 @@ namespace StubHubScraper.Services
         void UpdateQuickSearchItem(QuickSearch quickSearchItem);
         void DeleteQuickTickets(int quickId);
         void GetTicketsChartData(int userId, int quickId, DateTime date, out decimal average, out int sales);
+        int GetTicketsChartDuration(int userId, int quickId);
     }
 }

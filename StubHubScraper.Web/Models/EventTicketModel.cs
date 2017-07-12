@@ -13,6 +13,9 @@ namespace StubHubScraper.Web.Models
         public int TicketsCount { get; set; }
         public int Sales { get; set; }
         public decimal AvgPrice { get; set; }
+        public string TotalTickets { get; set; }
+        public string minTicketPrice { get; set; }
+        public string averageTicketPrice { get; set; }
     }
     public partial class EventTicketModel
     {

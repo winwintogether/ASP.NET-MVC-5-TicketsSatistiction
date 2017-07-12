@@ -42,7 +42,14 @@ hr {
    background-color:#3F4F62 !important;
 }
 
-
+#lastDate {
+  display: inline-block;
+  padding-left:200px;
+  float: left;
+  color:#109cf8;
+  font-weight:bold;
+  font-size:20px;
+}
 /* Absolute Center Spinner */
 .loading {
   position: fixed;

@@ -41,6 +41,7 @@ namespace StubHubScraper.Web.Controllers
             {
                 var soldTickets = _manualScrapingService.SearchTickets(user.Id, searchId, eventId, title, venue, startDate, endDate, zone, sectionForm, sectionTo,
                     LastWeekSalesOnly, HidePastEvents, ShowArchivedSearches);
+
                 foreach (var ticket in soldTickets)
                 {
                     var eventTicket = new EventTicketModel()
