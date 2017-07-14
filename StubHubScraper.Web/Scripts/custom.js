@@ -93,7 +93,6 @@
             grid.DataTable().draw();
 
             console.log(url);
-       //      console.log(JSON.stringify(data));
             $.each(data, function (i, v) {
 
                 var row = [];
@@ -158,13 +157,15 @@
                 dataProvider: chartData,
                 categoryField: "date"
             }],
-            
+           
             panels: [{
                 title: "Value",
                 percentHeight: 70,
                 stockGraphs: [{
                     id: "g1",
                     valueField: "volume",
+                    fillAlphas: 0.5,
+                    fillColors: "#b0de09",
                 }]
              }],
             
@@ -172,7 +173,8 @@
                 //    "color": "#fff",
                 marginLeft: 60,
                 marginTop: 5,
-                marginBottom: 5
+                marginBottom: 5,
+               
             },
             valueAxesSettings: {
                 inside: false,
@@ -240,7 +242,9 @@
                 percentHeight: 70,
                 stockGraphs: [{
                     id: "g1",
-                    valueField: "average"
+                    valueField: "average",
+                    fillAlphas: 0.5,
+                    fillColors: "#b0de09",
                 }],              
             }],
             panelsSettings: {
@@ -1156,8 +1160,13 @@
           
             ajaxRequest("get", "/api/scrapingevent/?ids=" + eventIds).done(function (data) {
 
-                bootbox.alert("Searching complete");
-                l.stop();
+                var param = { SearchId: $("#cboSearches").val(), DateTime: new Date() };
+
+                ajaxRequest("post", "/api/ExecuteSearch/", param).done(function (data) {
+                  
+                    bootbox.alert("Searching complete");
+                    l.stop();
+                });                               
             });
         }
         else {
@@ -1227,61 +1236,6 @@
     var DrawTicketChartData = [];
     function TicketDrawChart(chartData) {
 
-    /*    var chart = AmCharts.makeChart(
-
-            "chart_2",
-           {
-               "type": "serial",
-               "theme": "light",
-               "fontFamily": 'Open Sans',
-               "color": '#888888',
-               "legend": {
-                   "equalWidths": false,
-                   "useGraphSettings": true,
-                   "valueAlign": "left",
-                   "valueWidth": 120
-               },
-               "dataProvider": chartData,
-               "graphs": [{
-                   "alphaField": "alpha",
-                   "balloonText": "[[value]] ",
-                   "dashLengthField": "dashLength",
-                   "fillAlphas": 0.7,
-                   "legendValueText": "[[value]]",
-                   "title": "Volume",
-                   "type": "column",
-                   "valueField": "volume",
-                   "valueAxis": "volumeAxis"
-               }, {
-                   "bullet": "square",
-                   "bulletBorderAlpha": 1,
-                   "bulletBorderThickness": 1,
-                   "dashLengthField": "dashLength",
-                   "legendValueText": "[[value]]",
-                   "title": "Moving Average",
-                   "fillAlphas": 0,
-                   "valueField": "average",
-                   "valueAxis": "averageAxis"
-               }],
-               "chartCursor": {
-                   "categoryBalloonDateFormat": "DD",
-                   "cursorAlpha": 0.1,
-                   "cursorColor": "#000000",
-                   "fullWidth": true,
-                   "valueBalloonsEnabled": false,
-                   "zoomable": false
-               },
-               "categoryField": "date",
-               "exportConfig": {
-                   "menuBottom": "20px",
-                   "menuRight": "22px",
-                   "menuItems": [{
-                       "icon": App.getGlobalPluginsPath() + "amcharts/amcharts/images/export.png",
-                       "format": 'png'
-                   }]
-               }
-           });
-    */
         var volume = AmCharts.makeChart("volume_ticket_chart", {
             type: "stock",
             "theme": "light",
@@ -1488,7 +1442,8 @@
         var columnData1 = ["Id", "Title", "Venue", "Date", "Sales", "TicketsCount", "AvgPrice", "minTicketPrice", "averageTicketPrice", "TotalTickets"];
         var columnData2 = ["Id", "EventId", "EventTitle", "EventVenue", "EventDate", "Zone", "Section", "Row", "Price", "Qty", "DateSold"];
 
-        InitLoad(3);
+      
+        InitLoad(4);
 
         loadGridData("/api/lookupevents/?searchId=" + searchId + "&eventId=" + eventId
             + "&title=" + eventTitle + "&venue=" + eventVenue + "&startDate=" + startDate + "&endDate=" + endDate
@@ -1505,30 +1460,32 @@
             + "&zone=" + zone + "&sectionForm=" + sectionForm + "&sectionTo=" + sectionTo
             + "&lastWeekSalesOnly=" + lastWeekSalesOnly + "&hidePastEvents=" + hidePastEvents + "&showArchivedSearches=" + showArchivedSearches).done(function (data) {
 
-                TicketDrawChart(data);
-                
-                var LastDate = new Date(data[data.length - 1]["date"]);
-                var dd = LastDate.getDate();
-                var yyyy = LastDate.getFullYear();
-                var mm = LastDate.getMonth() + 1;
-               /* var hour = LastDate.getHours();
-                var min = LastDate.getMinutes();
-                var sec = LastDate.getSeconds();
-                */
-                if (dd < 10) {
-                    dd = '0' + dd;
-                }
-                if (mm < 10) {
-                    mm = '0' + mm;
-                }
-
-                LastDate = yyyy + '/' + mm + '/' + dd;
-                $("#lastDate").empty();
-                $("#lastDate").append(LastDate);
-
+                TicketDrawChart(data);    
                 DrawTicketChartData = data;
             });
-      
+       
+        ajaxRequest("get", "/api/ExecuteSearch").done(function (data) {
+            var LastDate = new Date(data);
+            var dd = LastDate.getDate();
+            var yyyy = LastDate.getFullYear();
+            var mm = LastDate.getMonth() + 1;
+            var hour = LastDate.getHours();
+            var min = LastDate.getMinutes();
+            var sec = LastDate.getSeconds();
+
+            if (dd < 10) {
+                dd = '0' + dd;
+            }
+
+            if (mm < 10) {
+                mm = '0' + mm;
+            }
+
+            LastDate = yyyy + '/' + mm + '/' + dd+"  "+hour+":"+min+":"+sec;
+
+            $("#lastDate").empty();
+            $("#lastDate").append(LastDate);
+        });
     });
 
     $("#btnExportTicketsToCSV").on("click", function () {
@@ -1601,11 +1558,13 @@
             bootbox.alert("Please select a ticket!");
 
     });
+
     $("#averageticketchart").on("mouseup", function () {
         setTimeout(function () {
             TicketDrawChart(DrawTicketChartData);
         }, 100)
     });
+
     $("#volumeticketchart").on("mouseup", function () {
         setTimeout(function () {
             TicketDrawChart(DrawTicketChartData);
@@ -1619,7 +1578,7 @@
         var appLogGrid = $("#table_7");
         var columnData = ["CreatedOnUtc", "Message"];
         InitLoad(1);
-        loadGridData("/api/applog/", appLogGrid, columnData);
+        loadGridData("/api/applog/", appLogGrid, columnData);              
     }
 
     /**********************************User Mangement***********************************/
@@ -1725,6 +1684,7 @@
                 Password: $("#password").val(),
                 UserName: $("#username").val()
             };
+
             ajaxRequest('post', '/api/users/', userData).done(function (data) {
                 bootbox.alert("The user has been saved!");
                 loadUsers();

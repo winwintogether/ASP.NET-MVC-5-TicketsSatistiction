@@ -65,8 +65,10 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="DefaultLogger.cs" />
+    <Compile Include="ExecuteSearchService.cs" />
     <Compile Include="FormsAuthenticationService.cs" />
     <Compile Include="IAuthenticationService.cs" />
+    <Compile Include="IExecuteSearchService.cs" />
     <Compile Include="ILogger.cs" />
     <Compile Include="IUserService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -37,6 +37,8 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Transactions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -51,8 +53,8 @@
     <Compile Include="DbContextExtensions.cs" />
     <Compile Include="DbObjectContext.cs" />
     <Compile Include="Domain\Event.cs" />
-    <Compile Include="Domain\EventExtraData.cs" />
     <Compile Include="Domain\EventTicket.cs" />
+    <Compile Include="Domain\ExecuteSearch.cs" />
     <Compile Include="Domain\LogLevel.cs" />
     <Compile Include="Domain\User.cs" />
     <Compile Include="Domain\QuickSearch.cs" />
@@ -63,10 +65,12 @@
     <Compile Include="Domain\SearchBulk.cs" />
     <Compile Include="Domain\Log.cs" />
     <Compile Include="EfRepository.cs" />
+    <Compile Include="Domain\EventExtraData.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="IApplicationDbContext.cs" />
     <Compile Include="IApplicationRepository.cs" />
     <Compile Include="IDbContext.cs" />
+    <Compile Include="Mapping\ExecuteSearchMap.cs" />
     <Compile Include="Mapping\EventMap.cs" />
     <Compile Include="Mapping\UserMap.cs" />
     <Compile Include="Mapping\EventTicketMap.cs" />
@@ -77,7 +81,6 @@
     <Compile Include="Mapping\LogMap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\StubHubScraper.Core\StubHubScraper.Core.csproj">
       <Project>{b04eff4f-e2b1-4680-80f8-bd079a433a7e}</Project>
@@ -95,6 +98,9 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -39,6 +39,8 @@ namespace StubHubScraper.Web.Infrastructure
             builder.RegisterType<SearchManagementService>().As<ISearchManagementService>().InstancePerHttpRequest();
             builder.RegisterType<ManualScrapingService>().As<IManualScrapingService>().InstancePerHttpRequest();
             builder.RegisterType<DefaultLogger>().As<ILogger>().InstancePerHttpRequest();
+
+            builder.RegisterType<ExecuteSearchService>().As<IExecuteSearchService>().InstancePerHttpRequest();
             //cache manager
             builder.RegisterType<MemoryCacheManager>().As<ICacheManager>().SingleInstance();
 

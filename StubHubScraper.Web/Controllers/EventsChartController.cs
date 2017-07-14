@@ -8,7 +8,6 @@ using System.Net.Http;
 using System.Web.Http;
 using StubHubScraper.Web.Filters;
 using StubHubScraper.Web.Models;
-
 using StubHubScraper.Data.Domain;
 using StubHubScraper.Services;
 
@@ -37,7 +36,7 @@ namespace StubHubScraper.Web.Controllers
         {
             var user = _authenticationService.GetAuthenticatedUser();
             var charts = new List<ChartModel>();
-         //   DateTime sDate = DateTime.Now.AddDays(-10);
+          
             var max = 0.0M;
             try
             {
@@ -64,6 +63,7 @@ namespace StubHubScraper.Web.Controllers
                     var c = charts.FirstOrDefault();
                     c.max = max;
                 }
+               
             }
             catch (Exception ex)
             {
