@@ -1267,6 +1267,8 @@
                 valueField: eventList[i],
                 comparable: true,
                 compareField: eventList[i],
+                fillAlphas: 0.5,
+                compareGraphFillAlphas:0.5,
                 balloonText: "[[title]]:<b>[[value]]</b>",
                 compareGraphBalloonText: "[[title]]:<b>[[value]]</b>"
                 };
@@ -1384,6 +1386,8 @@
                 valueField: eventList[i],
                 comparable: true,
                 compareField: eventList[i],
+                fillAlphas: 0.5,
+                compareGraphFillAlphas: 0.5,
                 balloonText: "[[title]]:<b>[[value]]</b>",
                 compareGraphBalloonText: "[[title]]:<b>[[value]]</b>"
             };
