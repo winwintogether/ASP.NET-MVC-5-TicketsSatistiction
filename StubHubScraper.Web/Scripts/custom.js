@@ -1204,8 +1204,13 @@
 
             ajaxRequest("get", "/api/scrapingmultisearches/?ids=" + searchIds).done(function (data) {
 
-                bootbox.alert("Searching complete");
-                l.stop();
+                var param = { SearchId: searchIds[0], DateTime: new Date() };
+
+                ajaxRequest("post", "/api/ExecuteSearch/", param).done(function (data) {
+
+                    bootbox.alert("Searching complete");
+                    l.stop();
+                });
             });
         }
         else {
@@ -1236,6 +1241,84 @@
     var DrawTicketChartData = [];
     function TicketDrawChart(chartData) {
 
+        var volumeDatasets = [];
+        var averageDatasets = [];
+        var volumechartData = [];
+        var averagechartData = [];
+        var stockgraphs = [];
+        var eventList = [];
+        var oldeventId = "";
+
+        $.each(chartData, function (i, v) {
+
+            var item1 = { date: v["date"] };
+            item1[v["eventId"]] = v["volume"];
+            var item2 = { date: v["date"] };
+            item2[v["eventId"]] = v["average"];
+            
+            if (oldeventId != v["eventId"]) {
+                oldeventId = v["eventId"];
+                eventList.push(v["eventId"]);
+            }
+
+            volumechartData.push(item1);
+            averagechartData.push(item2);
+        });
+     
+        for (i = 0; i < eventList.length; i++)
+        {
+            var item = {
+                id: "g" + (i + 1),
+                valueField: eventList[i],
+                comparable: true,
+                compareField: eventList[i],
+                balloonText: "[[title]]:<b>[[value]]</b>",
+                compareGraphBalloonText: "[[title]]:<b>[[value]]</b>"
+                };
+            stockgraphs.push(item);
+
+            var volumeItem = [];
+            $.each(volumechartData, function (j, v) {
+                if (v[eventList[i]]) {
+                    var child = { date: v["date"] };
+                    child[eventList[i]] = v[eventList[i]];
+                    volumeItem.push(child);
+                }
+            });
+            var volumedataItem = {
+               
+                title: "EventId:" + eventList[i],
+                fieldMappings: [{
+                    fromField: eventList[i],
+                    toField: eventList[i],
+                }],
+                dataProvider: volumeItem,
+                categoryField:"date"
+            }
+            volumeDatasets.push(volumedataItem);
+
+            var averageItem = [];
+            $.each(averagechartData, function (j, v) {
+                if (v[eventList[i]]) {
+                    var child = { date: v["date"] };
+                    child[eventList[i]] = v[eventList[i]];
+                    averageItem.push(child);
+                }
+            });
+            var averagedataItem = {
+
+                title: "EventId:" + eventList[i],
+                fieldMappings: [{
+                    fromField: eventList[i],
+                    toField: eventList[i],
+                }],
+                dataProvider: averageItem,
+                categoryField: "date"
+            }
+            averageDatasets.push(averagedataItem);
+        }
+
+      
         var volume = AmCharts.makeChart("volume_ticket_chart", {
             type: "stock",
             "theme": "light",
@@ -1243,28 +1326,14 @@
             "fontFamily": 'Open Sans',
             "color": '#888',
 
-            dataSets: [{
-                color: "#b0de09",
-                fieldMappings: [{
-                    fromField: "volume",
-                    toField: "volume"
-                },
-                ],
-                dataProvider: chartData,
-                categoryField: "date"
-            }],
+            dataSets: volumeDatasets,
 
             panels: [{
                 title: "Value",
                 percentHeight: 70,
-                stockGraphs: [{
-                    id: "g1",
-                    valueField: "volume",
-                }]
+                stockGraphs: stockgraphs,
             }],
-
             panelsSettings: {
-                //    "color": "#fff",
                 marginLeft: 60,
                 marginTop: 5,
                 marginBottom: 5
@@ -1308,37 +1377,26 @@
                     label: "ALL"
                 }]
             },
+            dataSetSelector: {
+                position: "left",
+                listHeight:300
+            },
 
         });
-        var average = AmCharts.makeChart("average_ticket_chart", {
+        
+       /* var average = AmCharts.makeChart("average_ticket_chart", {
             type: "stock",
             "theme": "light",
             pathToImages: "Content/assets/global/plugins/amcharts/amcharts/images/",
             "fontFamily": 'Open Sans',
-
             "color": '#888',
-            dataSets: [{
-                color: "#b0de09",
-                fieldMappings: [{
-                    fromField: "average",
-                    toField: "average"
-                },
-
-                ],
-                dataProvider: chartData,
-                categoryField: "date"
-            }],
-
+            dataSets: averageDatasets,
             panels: [{
                 title: "Value",
                 percentHeight: 70,
-                stockGraphs: [{
-                    id: "g1",
-                    valueField: "average"
-                }],
+                stockGraphs: stockgraphs,
             }],
             panelsSettings: {
-                //    "color": "#fff",
                 marginLeft: 60,
                 marginTop: 5,
                 marginBottom: 5
@@ -1351,7 +1409,6 @@
                 graph: "g1",
                 color: "#00F"
             },
-
             chartCursorSettings: {
                 valueBalloonsEnabled: true,
                 graphBulletSize: 1,
@@ -1383,9 +1440,12 @@
                     label: "ALL"
                 }]
             },
-
-        });
-
+            dataSetSelector: {
+                position: "left",
+                listHeight: 300
+            }
+         });
+     */
     }
 
     function TicketDataInit() {

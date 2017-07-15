@@ -50,6 +50,9 @@ hr {
   font-weight:bold;
   font-size:20px;
 }
+.amcharts-compare-item-div {
+    height:20px !important;
+}
 /* Absolute Center Spinner */
 .loading {
   position: fixed;
