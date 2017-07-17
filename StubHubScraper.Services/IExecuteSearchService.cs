@@ -7,7 +7,7 @@ namespace StubHubScraper.Services
 {
     public partial interface IExecuteSearchService
     {
-        DateTime GetLastSuccessfulDate();
+        String GetLastSuccessfulDate();
         void InsertExecuteSearch(ExecuteSearch executeSearchItem);
     }
 }

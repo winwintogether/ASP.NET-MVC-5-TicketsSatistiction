@@ -35,7 +35,7 @@ namespace StubHubScraper.Web.Controllers
         {
             var user = _authenticationService.GetAuthenticatedUser();
            
-            string result = _executeSearchService.GetLastSuccessfulDate().ToString();
+            string result = _executeSearchService.GetLastSuccessfulDate();
 
             return result;
         }

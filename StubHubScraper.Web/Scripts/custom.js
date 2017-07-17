@@ -1482,38 +1482,46 @@
         loadComboData(searchlist, "/api/search/?archived=0", "Name", "Id", '');
 
         ajaxRequest("get", "/api/ExecuteSearch").done(function (data) {
-            var LastDate = new Date(data);
-            var dd = LastDate.getDate();
-            var yyyy = LastDate.getFullYear();
-            var mm = LastDate.getMonth() + 1;
-            var hour = LastDate.getHours();
-            var min = LastDate.getMinutes();
-            var sec = LastDate.getSeconds();
+            if (data != "Nothing") {
+                var LastDate = new Date(data);
+                var dd = LastDate.getDate();
+                var yyyy = LastDate.getFullYear();
+                var mm = LastDate.getMonth() + 1;
+                var hour = LastDate.getHours();
+                var min = LastDate.getMinutes();
+                var sec = LastDate.getSeconds();
 
-            if (dd < 10) {
-                dd = '0' + dd;
+                if (dd < 10) {
+                    dd = '0' + dd;
+                }
+
+                if (mm < 10) {
+                    mm = '0' + mm;
+                }
+
+                if (hour < 10) {
+                    hour = '0' + hour;
+                }
+
+                if (min < 10) {
+                    min = '0' + min;
+                }
+
+                if (sec < 10) {
+                    sec = '0' + sec;
+                }
+
+                LastDate = "Last Successful Search DateTime: " + yyyy + '/' + mm + '/' + dd + " - " + hour + ":" + min + ":" + sec;
+
+                $("#lastDate").empty();
+                $("#lastDate").append(LastDate);
             }
+            else {
+                LastDate = "Last Successful Search DateTime: Nothing";
 
-            if (mm < 10) {
-                mm = '0' + mm;
+                $("#lastDate").empty();
+                $("#lastDate").append(LastDate);
             }
-
-            if (hour < 10) {
-                hour = '0' + hour;
-            }
-
-            if (min < 10) {
-                min = '0' + min;
-            }
-
-            if (sec < 10) {
-                sec = '0' + sec;
-            }
-
-            LastDate ="Last Successful Search DateTime: "+ yyyy + '/' + mm + '/' + dd + " - " + hour + ":" + min + ":" + sec;
-
-            $("#lastDate").empty();
-            $("#lastDate").append(LastDate);
         });
 
         TicketVolumeDrawChart([]);

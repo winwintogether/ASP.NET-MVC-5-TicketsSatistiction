@@ -16,8 +16,16 @@ namespace StubHubScraper.Services
         public ExecuteSearchService(IApplicationRepository<ExecuteSearch> quickExecuteSearchRepository) {
             this._quickExecuteSearchRepository = quickExecuteSearchRepository;
         }
-        public DateTime GetLastSuccessfulDate() {
-            return _quickExecuteSearchRepository.Table.Select(x => x.DateTime).Distinct().Max();
+        public string GetLastSuccessfulDate() {
+
+            try {
+                return _quickExecuteSearchRepository.Table.Select(x => x.DateTime).Distinct().Max().ToString();
+            }
+            catch (Exception ex) {
+                return "Nothing";
+            }
+
+
         }
         public void InsertExecuteSearch(ExecuteSearch executeSearchItem) {
             _quickExecuteSearchRepository.Insert(executeSearchItem);
