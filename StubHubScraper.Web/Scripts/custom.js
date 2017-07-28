@@ -1133,7 +1133,7 @@
     $("#cboSearches").on("change", function () {
 
         if ($(this).val() != "") {
-
+            $("#eventlist").empty();
             InitLoad(1);
             ajaxRequest("get", "/api/scrapingevent/?searchId=" + $(this).val()).done(function (data) {
                 $.each(data, function (i, v) {
@@ -1594,8 +1594,6 @@
                 TicketAverageDrawChart(data);
                 DrawTicketChartData = data;
             });
-       
-        
     });
 
     $("#btnExportTicketsToCSV").on("click", function () {
